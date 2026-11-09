@@ -1,0 +1,47 @@
+name: PC Virtual Gratis
+
+on:
+  workflow_dispatch:
+
+jobs:
+  windows-pc:
+    runs-on: windows-latest
+
+    steps:
+      - name: Iniciar PC Virtual
+        uses: actions/checkout@v4
+
+      - name: Configurar Windows
+        shell: pwsh
+        run: |
+          Write-Host "PC Virtual iniciado!"
+          Write-Host "Sistema operacional:"
+          Get-ComputerInfo | Select-Object WindowsProductName
+          Write-Host "Processador:"
+          Get-CimInstance Win32_Processor
+          Write-Host "Memoria RAM:"
+          Get-CimInstance Win32_ComputerSystem
+          Write-Host "Espaco em disco:"
+          Get-PSDrive C
+      - name: Atualizar ambiente
+        shell: pwsh
+        run: |
+          Write-Host "Preparando ambiente..."
+          winget --version
+      - name: Criar pasta de trabalho
+        shell: pwsh
+        run: |
+          New-Item -ItemType Directory -Path C:\PCVirtual -Force
+          New-Item -ItemType Directory -Path C:\PCVirtual\Arquivos -Force
+          New-Item -ItemType Directory -Path C:\PCVirtual\Programas -Force
+      - name: Verificar ambiente
+        shell: pwsh
+        run: |
+          Write-Host "Ambiente pronto!"
+          Get-ChildItem C:\PCVirtual
+          Write-Host "Configuracao concluida!"
+      - name: Finalizar
+        shell: pwsh
+        run: |
+          Write-Host "PC Virtual configurado."
+          Write-Host "Execucao concluida!"
